@@ -27,9 +27,9 @@
 
 
 /*---------- Private variables -----------------------------------------------*/
-uint8_t BTN_state[BTN_NUM] = {0};
-uint8_t BTN_prev_state[BTN_NUM] = {0};
-uint32_t last_press_time[BTN_NUM] = {0};
+uint8_t volatile BTN_state[BTN_NUM] = {0};
+uint8_t volatile BTN_prev_state[BTN_NUM] = {0};
+uint32_t volatile last_press_time[BTN_NUM] = {0};
 
 /*---------- Private function prototypes -------------------------------------*/
 
@@ -42,22 +42,26 @@ void BTN_press(GPIO_TypeDef *gpiox, uint16_t GPIO_pin, uint8_t num) {
   GPIO_PinState pin_state = HAL_GPIO_ReadPin(gpiox, GPIO_pin);
   uint32_t now = uwTick;
 
+  //char debug[32];
+
   if (pin_state == GPIO_PIN_RESET && (now - last_press_time[num]) > BTN_DEBOUNCE) {
     BTN_prev_state[num] = BTN_state[num];
     BTN_state[num] ^= 1;
     last_press_time[num] = now;
-  }
 
-  char debug[32];
-  sprintf(debug, "BTN %hu pressed\r\n", (num+1));
-  HAL_UART_Transmit(&huart1, (uint8_t*)debug, strlen(debug), HAL_MAX_DELAY);
+    /*sprintf(debug, "BTN %hu pressed\r\n", (num+1));
+    HAL_UART_Transmit(&huart1, (uint8_t*)debug, strlen(debug), HAL_MAX_DELAY);*/
+
+  } else {
+    BTN_recovery();
+  }
 }
 
 
 void BTN_recovery() {
-  char debug[32];
+  /*char debug[32];
   sprintf(debug, "RECOVERY\r\n");
-  HAL_UART_Transmit(&huart1, (uint8_t*)debug, strlen(debug), HAL_MAX_DELAY);
+  HAL_UART_Transmit(&huart1, (uint8_t*)debug, strlen(debug), HAL_MAX_DELAY);*/
 
   for (uint8_t i = 0; i < BTN_NUM; i++) {
     BTN_state[i] = BTN_prev_state[i];

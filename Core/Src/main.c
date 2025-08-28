@@ -25,6 +25,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "buttons.h"
+#include "rotary_switch.h"
 #include <stdio.h>
 #include <string.h>
 /* USER CODE END Includes */
@@ -59,9 +60,10 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_pin) {
-  char debug[32];
+  /*char debug[32];
   sprintf(debug, "CALLBACK\r\n");
-  HAL_UART_Transmit(&huart1, (uint8_t*)debug, strlen(debug), HAL_MAX_DELAY);
+  HAL_UART_Transmit(&huart1, (uint8_t*)debug, strlen(debug), HAL_MAX_DELAY);*/
+
   switch (GPIO_pin) {
   case BTN_TC_Pin:
     BTN_press(BTN_TC_GPIO_Port, BTN_TC_Pin, 0);
@@ -117,23 +119,26 @@ int main(void)
   MX_CAN1_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+  RSW_init_all();
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  char msg[32];
+  //char msg[64];
   uint32_t last_time = 0;
   const uint32_t interval = 500;
   while (1) {
+    RSW_State_t rsw = RSW_read_all();
     uint32_t now = uwTick;
 
     if (now - last_time >= interval) {
       last_time = now; 
 
-      sprintf(msg, "states: %d %d %d %d %d\r\n", 
-      BTN_state[0], BTN_state[1], BTN_state[2], BTN_state[3], BTN_state[4]);
-      HAL_UART_Transmit(&huart1, (uint8_t*)msg, strlen(msg), HAL_MAX_DELAY); 
+      /*sprintf(msg, "BTN: %d %d %d %d %d | RSW: %d %d %d\r\n",
+      BTN_state[0], BTN_state[1], BTN_state[2], BTN_state[3], BTN_state[4],
+      rsw.pw, rsw.ct, rsw.user);
+      HAL_UART_Transmit(&huart1, (uint8_t*)msg, strlen(msg), HAL_MAX_DELAY);*/
     }
     /* USER CODE END WHILE */
 

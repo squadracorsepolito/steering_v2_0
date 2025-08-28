@@ -79,6 +79,7 @@ Core/Src/buttons.c \
 Core/Src/can.c \
 Core/Src/gpio.c \
 Core/Src/main.c \
+Core/Src/rotary_switch.c \
 Core/Src/stm32f4xx_hal_msp.c \
 Core/Src/stm32f4xx_it.c \
 Core/Src/syscalls.c \
