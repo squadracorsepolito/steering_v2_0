@@ -24,7 +24,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "buttons.h"
+#include <stdio.h>
+#include <string.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -56,7 +58,31 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_pin) {
+  char debug[32];
+  sprintf(debug, "CALLBACK\r\n");
+  HAL_UART_Transmit(&huart1, (uint8_t*)debug, strlen(debug), HAL_MAX_DELAY);
+  switch (GPIO_pin) {
+  case BTN_TC_Pin:
+    BTN_press(BTN_TC_GPIO_Port, BTN_TC_Pin, 0);
+    break;
+  case BTN_TV_Pin:
+    BTN_press(BTN_TV_GPIO_Port, BTN_TV_Pin, 1);
+    break;
+  case BTN_LC_Pin:
+    BTN_press(BTN_LC_GPIO_Port, BTN_LC_Pin, 2);
+    break;
+  case BTN_RTD_Pin:
+    BTN_press(BTN_RTD_GPIO_Port, BTN_RTD_Pin, 3);
+    break; 
+  case BTN_USER_Pin:
+    BTN_press(BTN_USER_GPIO_Port, BTN_USER_Pin, 4);
+    break;
+  default:
+    BTN_recovery();
+    break;
+  }
+}
 /* USER CODE END 0 */
 
 /**
@@ -96,8 +122,19 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
+  char msg[32];
+  uint32_t last_time = 0;
+  const uint32_t interval = 500;
+  while (1) {
+    uint32_t now = uwTick;
+
+    if (now - last_time >= interval) {
+      last_time = now; 
+
+      sprintf(msg, "states: %d %d %d %d %d\r\n", 
+      BTN_state[0], BTN_state[1], BTN_state[2], BTN_state[3], BTN_state[4]);
+      HAL_UART_Transmit(&huart1, (uint8_t*)msg, strlen(msg), HAL_MAX_DELAY); 
+    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

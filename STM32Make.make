@@ -75,6 +75,7 @@ endif
 ######################################
 # C sources
 C_SOURCES =  \
+Core/Src/buttons.c \
 Core/Src/can.c \
 Core/Src/gpio.c \
 Core/Src/main.c \
