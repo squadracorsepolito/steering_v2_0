@@ -101,20 +101,15 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  //char msg[64];
   uint32_t last_time = 0;
-  const uint32_t interval = 500;
   while (1) {
-    RSW_State_t rsw = RSW_read_all();
     uint32_t now = uwTick;
+    uint8_t payload[3];
 
-    if (now - last_time >= interval) {
+    if (now - last_time >= CAN_CYCLE_TIME) {
       last_time = now; 
-
-      /*sprintf(msg, "BTN: %d %d %d %d %d | RSW: %d %d %d\r\n",
-      BTN_state[0], BTN_state[1], BTN_state[2], BTN_state[3], BTN_state[4],
-      rsw.pw, rsw.ct, rsw.user);
-      HAL_UART_Transmit(&huart1, (uint8_t*)msg, strlen(msg), HAL_MAX_DELAY);*/
+      CAN_build_payload(payload);
+      CAN_steering_Msg_send(&hcan1, payload, 3);
     }
     /* USER CODE END WHILE */
 

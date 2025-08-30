@@ -24,21 +24,29 @@
 #include "usart.h"
 #include <stdio.h>
 #include <string.h>
+#include "buttons.h"
+#include "rotary_switch.h"
 
-CAN_TxHeaderTypeDef TxHeader;
-uint8_t TxData[8];
-uint32_t TxMailbox;
+void CAN_build_payload(uint8_t *payload) {
+    RSW_State_t rsw = RSW_read_all();
 
-CAN_RxHeaderTypeDef RxHeader;
-uint8_t RxData[8];
-uint8_t data_avlble;
+    payload[0] = 0;
+    payload[0] |= (BTN_state[0] & 0x01) << 0;
+    payload[0] |= (BTN_state[1] & 0x01) << 1;
+    payload[0] |= (BTN_state[2] & 0x01) << 2;
+    payload[0] |= (BTN_state[3] & 0x01) << 3;
+    payload[0] |= (BTN_state[4] & 0x01) << 4;
+
+    payload[1] = ((rsw.pw & 0x0F) << 0) | ((rsw.ct & 0x0F) << 4);
+    payload[2] = (rsw.user & 0x0F << 0);
+}
 
 
 void CAN_ErrorHandler(CAN_HandleTypeDef *hcan) {
     char buf[20];
     uint32_t error = HAL_CAN_GetError(hcan);
 
-#if 1
+#if 0
 #define tmp_printf(X)                                                                   \
     do {                                                                                \
         HAL_UART_Transmit(&huart1, (uint8_t *)(X), strlen(X), HAL_MAX_DELAY);           \
@@ -281,5 +289,19 @@ HAL_StatusTypeDef CAN_send(CAN_HandleTypeDef *hcan, uint8_t *buffer, CAN_TxHeade
     HAL_StatusTypeDef status = HAL_CAN_AddTxMessage(hcan, header, buffer, &mailbox);
 
     return status;
+}
+
+
+void CAN_steering_Msg_send(CAN_HandleTypeDef *hcan, uint8_t *buffer, uint8_t len) {
+    CAN_TxHeaderTypeDef header;
+    header.StdId = 0x165;
+    header.IDE = CAN_ID_STD;
+    header.RTR = CAN_RTR_DATA;
+    header.DLC = len;
+    header.TransmitGlobalTime = DISABLE;
+
+    if (CAN_send(hcan, buffer, &header) != HAL_OK) {
+        CAN_ErrorHandler(hcan);
+    }
 }
 /* USER CODE END 1 */

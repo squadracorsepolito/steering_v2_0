@@ -35,13 +35,14 @@ extern "C" {
 extern CAN_HandleTypeDef hcan1;
 
 /* USER CODE BEGIN Private defines */
-
+#define CAN_CYCLE_TIME 500
 /* USER CODE END Private defines */
 
 void MX_CAN1_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-
+void CAN_build_payload(uint8_t *payload);
+void CAN_steering_Msg_send(CAN_HandleTypeDef *hcan, uint8_t *buffer, uint8_t len);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

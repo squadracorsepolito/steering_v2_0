@@ -2,7 +2,7 @@
  * @file    buttons.h
  * @author  Pietro Levo [pietro.levo.sc@gmail.com]
  * @date    2025-08-28 (date of creation)
- * @updated 2025-08-28 (date of last update)
+ * @updated 2025-08-30 (date of last update)
  * @version v1.0.0
  * @prefix  BTN
  *
