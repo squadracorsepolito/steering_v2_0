@@ -36,6 +36,7 @@ extern volatile uint32_t last_press_time[BTN_NUM];
 
 
 /* ---------- Exported functions ---------------------------------------------*/
+void BTN_init(void);
 void BTN_press(GPIO_TypeDef *gpiox, uint16_t GPIO_pin, uint8_t num);
 void BTN_recovery();
 
