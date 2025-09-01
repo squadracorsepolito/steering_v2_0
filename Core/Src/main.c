@@ -59,32 +59,7 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_pin) {
-  /*char debug[32];
-  sprintf(debug, "CALLBACK\r\n");
-  HAL_UART_Transmit(&huart1, (uint8_t*)debug, strlen(debug), HAL_MAX_DELAY);*/
 
-  switch (GPIO_pin) {
-  case BTN_TC_Pin:
-    BTN_press(BTN_TC_GPIO_Port, BTN_TC_Pin, 0);
-    break;
-  case BTN_TV_Pin:
-    BTN_press(BTN_TV_GPIO_Port, BTN_TV_Pin, 1);
-    break;
-  case BTN_LC_Pin:
-    BTN_press(BTN_LC_GPIO_Port, BTN_LC_Pin, 2);
-    break;
-  case BTN_RTD_Pin:
-    BTN_press(BTN_RTD_GPIO_Port, BTN_RTD_Pin, 3);
-    break; 
-  case BTN_USER_Pin:
-    BTN_press(BTN_USER_GPIO_Port, BTN_USER_Pin, 4);
-    break;
-  default:
-    BTN_recovery();
-    break;
-  }
-}
 /* USER CODE END 0 */
 
 /**
@@ -119,26 +94,22 @@ int main(void)
   MX_CAN1_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+  BTN_init();
   RSW_init_all();
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  //char msg[64];
   uint32_t last_time = 0;
-  const uint32_t interval = 500;
   while (1) {
-    RSW_State_t rsw = RSW_read_all();
     uint32_t now = uwTick;
+    uint8_t payload[3];
 
-    if (now - last_time >= interval) {
+    if (now - last_time >= CAN_CYCLE_TIME) {
       last_time = now; 
-
-      /*sprintf(msg, "BTN: %d %d %d %d %d | RSW: %d %d %d\r\n",
-      BTN_state[0], BTN_state[1], BTN_state[2], BTN_state[3], BTN_state[4],
-      rsw.pw, rsw.ct, rsw.user);
-      HAL_UART_Transmit(&huart1, (uint8_t*)msg, strlen(msg), HAL_MAX_DELAY);*/
+      CAN_build_payload(payload);
+      CAN_steering_Msg_send(&hcan1, payload, 3);
     }
     /* USER CODE END WHILE */
 

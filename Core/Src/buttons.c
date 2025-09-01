@@ -2,7 +2,7 @@
  * @file    buttons.c
  * @author  Pietro Levo [pietro.levo.sc@gmail.com]
  * @date    2025-08-28 (date of creation)
- * @updated 2025-08-28 (date of last update)
+ * @updated 2025-08-30 (date of last update)
  * @version v1.0.0
  * @prefix  BTN
  *
@@ -38,6 +38,15 @@ uint32_t volatile last_press_time[BTN_NUM] = {0};
 
 
 /*---------- Exported Functions ----------------------------------------------*/
+void BTN_init(void) {
+  for (uint8_t i = 0; i < BTN_NUM; i++) {
+    BTN_state[i] = 0;
+    BTN_prev_state[i] = 0;
+    last_press_time[i] = 0;
+  }
+}
+
+
 void BTN_press(GPIO_TypeDef *gpiox, uint16_t GPIO_pin, uint8_t num) {
   GPIO_PinState pin_state = HAL_GPIO_ReadPin(gpiox, GPIO_pin);
   uint32_t now = uwTick;

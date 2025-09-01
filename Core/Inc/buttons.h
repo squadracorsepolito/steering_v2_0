@@ -2,7 +2,7 @@
  * @file    buttons.h
  * @author  Pietro Levo [pietro.levo.sc@gmail.com]
  * @date    2025-08-28 (date of creation)
- * @updated 2025-08-28 (date of last update)
+ * @updated 2025-08-30 (date of last update)
  * @version v1.0.0
  * @prefix  BTN
  *
@@ -36,6 +36,7 @@ extern volatile uint32_t last_press_time[BTN_NUM];
 
 
 /* ---------- Exported functions ---------------------------------------------*/
+void BTN_init(void);
 void BTN_press(GPIO_TypeDef *gpiox, uint16_t GPIO_pin, uint8_t num);
 void BTN_recovery();
 
