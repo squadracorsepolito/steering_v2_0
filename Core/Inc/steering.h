@@ -20,6 +20,7 @@
 /* ---------- Includes -------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
 #include "buttons.h"
+#include "rotary_switch.h"
 #include "usart.h"
 #include <stdio.h>
 #include <string.h>
@@ -37,7 +38,7 @@
 
 
 /* ---------- Exported functions ---------------------------------------------*/
-void steering_run(btnStateHandleTypedef *hbtn);
+void steering_run(btnStateHandleTypedef *hbtn, rswStateHandleTypedef *hrsw);
 
 /* ---------- Private types --------------------------------------------------*/
 

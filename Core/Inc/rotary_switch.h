@@ -19,9 +19,23 @@
 
 /* ---------- Includes -------------------------------------------------------*/
 #include "main.h"
+#include "IIR_filter.h"
 
 /* ---------- Exported types -------------------------------------------------*/
+typedef struct {
+    GPIO_TypeDef *gpiox[4];
+    uint16_t pin[4];
+    uint8_t state[4];
+    IIR_filter filter[4];
+    uint8_t position;
+} RSW_t;
 
+
+typedef struct {
+    RSW_t power;
+    RSW_t control;
+    RSW_t user;
+} rswStateHandleTypedef;
 
 /* ---------- Exported constants ---------------------------------------------*/
 
@@ -33,7 +47,9 @@
 
 
 /* ---------- Exported functions ---------------------------------------------*/
-
+void RSW_Init(rswStateHandleTypedef *hrsw);
+void RSW_sample_one(RSW_t *rsw);
+void RSW_sample(rswStateHandleTypedef *hrsw);
 
 /* ---------- Private types --------------------------------------------------*/
 
