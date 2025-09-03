@@ -21,32 +21,19 @@
 #include "main.h"
 
 /* ---------- Exported types -------------------------------------------------*/
-typedef struct {
-  GPIO_TypeDef *gpiox[4];
-  uint16_t pin[4];
-  uint8_t position;
-} RSW_t;
 
-typedef struct {
-  uint8_t pw;
-  uint8_t ct;
-  uint8_t user;
-} RSW_State_t;
+
 /* ---------- Exported constants ---------------------------------------------*/
 
 
 /* ---------- Exported variables ---------------------------------------------*/
-extern RSW_t rsw_PW;
-extern RSW_t rsw_CT;
-extern RSW_t rsw_USER;
+
 
 /* ---------- Exported macros ------------------------------------------------*/
 
 
 /* ---------- Exported functions ---------------------------------------------*/
-void RSW_init_all(void);
-uint8_t RSW_read(RSW_t *rsw);
-RSW_State_t RSW_read_all(void);
+
 
 /* ---------- Private types --------------------------------------------------*/
 

@@ -1,21 +1,21 @@
 /**
- * @file    buttons.h
+ * @file    IIR_filter.h
  * @author  Pietro Levo [pietro.levo.sc@gmail.com]
- * @date    2025-08-28 (date of creation)
- * @updated 2025-08-30 (date of last update)
- * @version v1.0.0
- * @prefix  BTN
+ * @date    2025-09-03 (date of creation)
+ * @updated 2025-09-03 (date of last update)
+ * @version v0.1.0
+ * @prefix  IIR
  *
  * @brief   Implementation of some software
- * @details This code implements functions for the 5 buttons in the steering
+ * @details This code implements functions for a first order IIR filter
  *
  * @license Licensed under "THE BEER-WARE LICENSE", Revision 69 
  *          see LICENSE file in the root directory of this software component
  */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef _BUTTONS_H_
-#define _BUTTONS_H_
+#ifndef _IIR_FILTER_H_
+#define _IIR_FILTER_H_
 
 /* ---------- Includes -------------------------------------------------------*/
 #include "main.h"

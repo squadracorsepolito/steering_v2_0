@@ -22,34 +22,7 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN 0 */
-#include "buttons.h"
 
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_pin) {
-  /*char debug[32];
-  sprintf(debug, "CALLBACK\r\n");
-  HAL_UART_Transmit(&huart1, (uint8_t*)debug, strlen(debug), HAL_MAX_DELAY);*/
-
-  switch (GPIO_pin) {
-  case BTN_TC_Pin:
-    BTN_press(BTN_TC_GPIO_Port, BTN_TC_Pin, 0);
-    break;
-  case BTN_TV_Pin:
-    BTN_press(BTN_TV_GPIO_Port, BTN_TV_Pin, 1);
-    break;
-  case BTN_LC_Pin:
-    BTN_press(BTN_LC_GPIO_Port, BTN_LC_Pin, 2);
-    break;
-  case BTN_RTD_Pin:
-    BTN_press(BTN_RTD_GPIO_Port, BTN_RTD_Pin, 3);
-    break; 
-  case BTN_USER_Pin:
-    BTN_press(BTN_USER_GPIO_Port, BTN_USER_Pin, 4);
-    break;
-  default:
-    BTN_recovery();
-    break;
-  }
-}
 /* USER CODE END 0 */
 
 /*----------------------------------------------------------------------------*/

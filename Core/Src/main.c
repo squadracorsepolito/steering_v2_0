@@ -26,8 +26,7 @@
 /* USER CODE BEGIN Includes */
 #include "buttons.h"
 #include "rotary_switch.h"
-#include <stdio.h>
-#include <string.h>
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -101,16 +100,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  uint32_t last_time = 0;
   while (1) {
-    uint32_t now = uwTick;
-    uint8_t payload[3];
-
-    if (now - last_time >= CAN_CYCLE_TIME) {
-      last_time = now; 
-      CAN_build_payload(payload);
-      CAN_steering_Msg_send(&hcan1, payload, 3);
-    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
