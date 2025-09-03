@@ -1,33 +1,31 @@
 /**
- * @file    buttons.h
+ * @file    steering.h
  * @author  Pietro Levo [pietro.levo.sc@gmail.com]
- * @date    2025-08-28 (date of creation)
+ * @date    2025-09-03 (date of creation)
  * @updated 2025-09-04 (date of last update)
- * @version v1.0.0
- * @prefix  BTN
+ * @version v0.1.0
+ * @prefix  STE
  *
  * @brief   Implementation of some software
- * @details This code implements functions for the 5 buttons in the steering
+ * @details This code implements bla bla
  *
  * @license Licensed under "THE BEER-WARE LICENSE", Revision 69 
  *          see LICENSE file in the root directory of this software component
  */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef _BUTTONS_H_
-#define _BUTTONS_H_
+#ifndef _STEERING_H_
+#define _STEERING_H_
 
 /* ---------- Includes -------------------------------------------------------*/
-#include "main.h"
-#include "IIR_filter.h"
+#include "stm32f4xx_hal.h"
+#include "buttons.h"
+#include "usart.h"
+#include <stdio.h>
+#include <string.h>
 
 /* ---------- Exported types -------------------------------------------------*/
-typedef struct {
-    uint8_t state[5];
-    uint8_t prev_state[5];
-    uint8_t active[5];
-    IIR_filter filter[5];
-} btnStateHandleTypedef;
+
 
 /* ---------- Exported constants ---------------------------------------------*/
 
@@ -39,8 +37,7 @@ typedef struct {
 
 
 /* ---------- Exported functions ---------------------------------------------*/
-void BTN_Init(btnStateHandleTypedef *hbtn);
-void BTN_Sample(btnStateHandleTypedef *hbtn);
+void steering_run(btnStateHandleTypedef *hbtn);
 
 /* ---------- Private types --------------------------------------------------*/
 

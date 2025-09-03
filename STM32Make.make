@@ -75,11 +75,13 @@ endif
 ######################################
 # C sources
 C_SOURCES =  \
+Core/Src/IIR_filter.c \
 Core/Src/buttons.c \
 Core/Src/can.c \
 Core/Src/gpio.c \
 Core/Src/main.c \
 Core/Src/rotary_switch.c \
+Core/Src/steering.c \
 Core/Src/stm32f4xx_hal_msp.c \
 Core/Src/stm32f4xx_it.c \
 Core/Src/syscalls.c \

@@ -24,8 +24,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "buttons.h"
-#include "rotary_switch.h"
+#include "steering.h"
 
 /* USER CODE END Includes */
 
@@ -58,7 +57,7 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+btnStateHandleTypedef hbtn;
 /* USER CODE END 0 */
 
 /**
@@ -93,14 +92,13 @@ int main(void)
   MX_CAN1_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-  BTN_init();
-  RSW_init_all();
-
+  BTN_Init(&hbtn);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1) {
+    steering_run(&hbtn);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

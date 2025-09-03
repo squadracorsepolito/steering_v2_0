@@ -21,7 +21,10 @@
 #include "main.h"
 
 /* ---------- Exported types -------------------------------------------------*/
-
+typedef struct {
+    float alpha;        //alpha = RC/(Ts + RC)
+    float out;
+} IIR_filter;
 
 /* ---------- Exported constants ---------------------------------------------*/
 
@@ -33,7 +36,8 @@
 
 
 /* ---------- Exported functions ---------------------------------------------*/
-
+void IIR_Init(IIR_filter *filter, float alpha);
+float IIR_Update(IIR_filter *filter, float in);
 
 /* ---------- Private types --------------------------------------------------*/
 
