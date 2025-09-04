@@ -43,6 +43,15 @@ void IIR_Init(IIR_filter *filter, float alpha);
 float IIR_Update(IIR_filter *filter, float in);
 ```
 
+some math:
+```m
+% first-order IIR recursive difference equation:
+y(n) = (1 - alpha) * x(n) + alpha * y(n-1)                          % where 0 <= alpha <= 1   
+
+% from the differential equation of a LP filter and discretization:                                     
+Vout(n) = (Ts / (Ts + RC)) * Vin(n) + (RC / (Ts + RC)) * Vout(n-1)  % (RC / (Ts + RC)) = alpha
+```
+
 ### 3. buttons
 #### Inc/buttons.h Src/buttons.c
 handle the buttons and define the functions for sampling their state.
