@@ -27,11 +27,13 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "buttons.h"
-#include "rotary_switch.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "buttons.h"
+#include "rotary_switch.h"
+#include "usart.h"
+#include "stdio.h"
+#include "string.h"
 /* USER CODE END Includes */
 
 extern CAN_HandleTypeDef hcan1;

@@ -38,7 +38,7 @@ void CAN_ErrorHandler(CAN_HandleTypeDef *hcan) {
     char buf[20];
     uint32_t error = HAL_CAN_GetError(hcan);
 
-#if 0
+#if DEBUG
 #define tmp_printf(X)                                                                   \
     do {                                                                                \
         HAL_UART_Transmit(&huart1, (uint8_t *)(X), strlen(X), HAL_MAX_DELAY);           \

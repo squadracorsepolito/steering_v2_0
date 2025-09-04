@@ -53,7 +53,7 @@ void steering_run(btnStateHandleTypedef *hbtn, rswStateHandleTypedef *hrsw) {
         CAN_steering_Msg_send(&hcan1, payload, 3);
     }
 
-#if 0
+#if DEBUG
     char msg[100];
     sprintf(msg,
     "BTN: %d %d %d %d %d RSW: %u %u %u\r\n",
@@ -66,8 +66,8 @@ void steering_run(btnStateHandleTypedef *hbtn, rswStateHandleTypedef *hrsw) {
     hrsw->control.position,
     hrsw->user.position);
     HAL_UART_Transmit(&huart1, (uint8_t*)msg, strlen(msg), HAL_MAX_DELAY);
-}
 #endif
+}
 
 /*---------- Private Functions -----------------------------------------------*/
 
