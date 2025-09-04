@@ -27,6 +27,8 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "buttons.h"
+#include "rotary_switch.h"
 
 /* USER CODE BEGIN Includes */
 
@@ -41,6 +43,8 @@ extern CAN_HandleTypeDef hcan1;
 void MX_CAN1_Init(void);
 
 /* USER CODE BEGIN Prototypes */
+void CAN_build_payload(uint8_t *payload, btnStateHandleTypedef *hbtn, rswStateHandleTypedef *hrsw);
+void CAN_steering_Msg_send(CAN_HandleTypeDef *hcan, uint8_t *buffer, uint8_t len);
 
 /* USER CODE END Prototypes */
 

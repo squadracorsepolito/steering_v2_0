@@ -7,7 +7,8 @@
  * @prefix  STE
  *
  * @brief   Implementation of some software
- * @details This code implements bla bla
+ * @details This code implements the function to activate the steering wheel
+ *          and run the components
  *
  * @license Licensed under "THE BEER-WARE LICENSE", Revision 69 
  *          see LICENSE file in the root directory of this software component
@@ -19,7 +20,8 @@
 
 /*---------- Private define --------------------------------------------------*/
 #define BTN_SAMPLE_TIME 10
-
+#define RSW_SAMPLE_TIME 10
+#define CAN_CYCLE_TIME 500
 /*---------- Private macro ---------------------------------------------------*/
 
 
@@ -35,6 +37,8 @@
 /*---------- Exported Functions ----------------------------------------------*/
 void steering_run(btnStateHandleTypedef *hbtn, rswStateHandleTypedef *hrsw) {
     static uint32_t sfwTimSample = 0;
+    static uint32_t sfwTimCan = 0;
+    uint8_t payload[3];
     uint32_t now = HAL_GetTick();
 
     if (now >= sfwTimSample) {
@@ -43,8 +47,14 @@ void steering_run(btnStateHandleTypedef *hbtn, rswStateHandleTypedef *hrsw) {
         RSW_sample(hrsw);
     }
 
-    char msg[100];
+    if (now >= sfwTimCan) {
+        sfwTimCan = now + CAN_CYCLE_TIME;
+        CAN_build_payload(payload, hbtn, hrsw);
+        CAN_steering_Msg_send(&hcan1, payload, 3);
+    }
 
+#if 0
+    char msg[100];
     sprintf(msg,
     "BTN: %d %d %d %d %d RSW: %u %u %u\r\n",
     hbtn->active[0],
@@ -55,9 +65,9 @@ void steering_run(btnStateHandleTypedef *hbtn, rswStateHandleTypedef *hrsw) {
     hrsw->power.position,
     hrsw->control.position,
     hrsw->user.position);
-
     HAL_UART_Transmit(&huart1, (uint8_t*)msg, strlen(msg), HAL_MAX_DELAY);
 }
+#endif
 
 /*---------- Private Functions -----------------------------------------------*/
 

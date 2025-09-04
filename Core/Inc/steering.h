@@ -21,6 +21,7 @@
 #include "stm32f4xx_hal.h"
 #include "buttons.h"
 #include "rotary_switch.h"
+#include "can.h"
 #include "usart.h"
 #include <stdio.h>
 #include <string.h>
