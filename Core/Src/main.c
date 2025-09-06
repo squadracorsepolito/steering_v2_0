@@ -57,8 +57,7 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-btnStateHandleTypedef hbtn;
-rswStateHandleTypedef hrsw;
+
 /* USER CODE END 0 */
 
 /**
@@ -93,14 +92,13 @@ int main(void)
   MX_CAN1_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-  BTN_Init(&hbtn);
-  RSW_Init(&hrsw);
+  Steering_Init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1) {
-    steering_run(&hbtn, &hrsw);
+    Steering_Run();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

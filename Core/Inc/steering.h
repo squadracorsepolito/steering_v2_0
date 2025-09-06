@@ -19,15 +19,17 @@
 
 /* ---------- Includes -------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
-#include "buttons.h"
-#include "rotary_switch.h"
+#include "bsp.h"
 #include "can.h"
 #include "usart.h"
 #include <stdio.h>
 #include <string.h>
 
 /* ---------- Exported types -------------------------------------------------*/
-
+typedef struct {
+    BTN_handleTypedef hbtn[BTN_Device_NUM];
+    RSW_handleTypedef hrsw[RSW_Device_NUM];
+} Steering_Board;
 
 /* ---------- Exported constants ---------------------------------------------*/
 
@@ -39,7 +41,8 @@
 
 
 /* ---------- Exported functions ---------------------------------------------*/
-void steering_run(btnStateHandleTypedef *hbtn, rswStateHandleTypedef *hrsw);
+void Steering_Init(void);
+void Steering_Run(void);
 
 /* ---------- Private types --------------------------------------------------*/
 

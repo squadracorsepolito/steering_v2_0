@@ -19,18 +19,19 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "can.h"
-
+#include "bsp.h"
+#include "usart.h"
+#include "stdio.h"
+#include "string.h"
 /* USER CODE BEGIN 0 */
-void CAN_build_payload(uint8_t *payload, btnStateHandleTypedef *hbtn, rswStateHandleTypedef *hrsw) {
+void CAN_build_payload(uint8_t *payload, BTN_handleTypedef *hbtn, RSW_handleTypedef *hrsw) {
     payload[0] = 0;
-    payload[0] |= (hbtn->active[0] & 0x01) << 0;
-    payload[0] |= (hbtn->active[1] & 0x01) << 1;
-    payload[0] |= (hbtn->active[2] & 0x01) << 2;
-    payload[0] |= (hbtn->active[3] & 0x01) << 3;
-    payload[0] |= (hbtn->active[4] & 0x01) << 4;
+    for (uint8_t i = 0; i < BTN_Device_NUM; i++) {
+        payload[0] |= (hbtn[i].state == BTN_state_ON ? 1 : 0) << i;
+    }
 
-    payload[1] = ((hrsw->power.position & 0x0F) << 0) | ((hrsw->control.position & 0x0F) << 4);
-    payload[2] = (hrsw->user.position & 0x0F) << 0;
+    payload[1] = (hrsw[RSW_Device1].state & 0x0F) | ((hrsw[RSW_Device2].state & 0x0F) << 4);
+    payload[2] = hrsw[RSW_Device3].state & 0x0F;
 }
 
 
@@ -299,25 +300,25 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan) {
   char msg[128];
 
   if (HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &rxHeader, rxData) == HAL_OK) {
-    uint8_t btn_active[5];
-    btn_active[0] = (rxData[0] >> 0) & 0x01;
-    btn_active[1] = (rxData[0] >> 1) & 0x01;
-    btn_active[2] = (rxData[0] >> 2) & 0x01;
-    btn_active[3] = (rxData[0] >> 3) & 0x01;
-    btn_active[4] = (rxData[0] >> 4) & 0x01;
+    uint8_t btn_active[BTN_Device_NUM];
+    for (uint8_t i = 0; i < BTN_Device_NUM; i++) {
+      btn_active[i] = (rxData[0] >> i) & 0x01;
+    }
 
     uint8_t rsw_power   = (rxData[1] >> 0) & 0x0F;
     uint8_t rsw_control = (rxData[1] >> 4) & 0x0F;
     uint8_t rsw_user    = (rxData[2] >> 0) & 0x0F;
+
     sprintf(msg, "CAN RX: [%02X %02X %02X] BTN: [%d %d %d %d %d] RSW: [%d %d %d]\r\n",
       rxData[0], rxData[1], rxData[2],
       btn_active[0], btn_active[1], btn_active[2], btn_active[3], btn_active[4],
       rsw_power, rsw_control, rsw_user);
-      
+
     HAL_UART_Transmit(&huart1, (uint8_t*)msg, strlen(msg), HAL_MAX_DELAY);
   }
 }
 #endif
+
 
 /*
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan) {}
@@ -338,12 +339,13 @@ void HAL_CAN_ErrorCallback(CAN_HandleTypeDef *hcan) {
 
 
 static HAL_StatusTypeDef CAN_wait(CAN_HandleTypeDef *hcan, uint8_t timeout) {
-  uint32_t tick = uwTick;
+  uint32_t tick = HAL_GetTick();
   while (HAL_CAN_GetTxMailboxesFreeLevel(hcan) == 0) {
-    if(HAL_GetTick() - tick > timeout) return HAL_TIMEOUT;
+    if (HAL_GetTick() - tick > timeout) return HAL_TIMEOUT;
   }
   return HAL_OK;
 }
+
 
 
 HAL_StatusTypeDef CAN_send(CAN_HandleTypeDef *hcan, uint8_t *buffer, CAN_TxHeaderTypeDef *header) {
