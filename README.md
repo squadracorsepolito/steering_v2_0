@@ -26,7 +26,13 @@ The Steering system serves as an hub for all the controls that the driver can to
 contains the function to be run in the main, it call the sample of buttons and switches and send CAN messages. 
 
 ```c
-void steering_run(btnStateHandleTypedef *hbtn, rswStateHandleTypedef *hrsw);
+typedef struct {
+    BTN_handleTypedef hbtn[BTN_Device_NUM];
+    RSW_handleTypedef hrsw[RSW_Device_NUM];
+} Steering_Board;
+
+void Steering_Init(void);
+void Steering_Run(void);
 ```
 
 ### 2. IIR_filter
@@ -53,7 +59,7 @@ Vout(n) = (Ts / (Ts + RC)) * Vin(n) + (RC / (Ts + RC)) * Vout(n-1)  % (RC / (Ts 
 ```
 
 ### 3. buttons
-#### Inc/buttons.h Src/buttons.c
+#### Inc/bsp.h Src/bsp.c
 handle the buttons and define the functions for sampling their state.
 - **BTN_1**: Traction control
 - **BTN_2**: Torque vectoring
@@ -63,41 +69,47 @@ handle the buttons and define the functions for sampling their state.
 
 ```c
 typedef struct {
-    uint8_t state[5];
-    uint8_t prev_state[5];
-    uint8_t active[5];
-    IIR_filter filter[5];
-} btnStateHandleTypedef;
+    enum BTN_Device id;
+    struct GPIO_Tuple gpio_tuple;
+    uint8_t value;
+    uint8_t prev_value;
+    enum BTN_State state;
+    IIR_filter filter;
+} BTN_handleTypedef;
 
-void BTN_Init(btnStateHandleTypedef *hbtn);
-void BTN_Sample(btnStateHandleTypedef *hbtn);
+void BTN_Devices_Init(BTN_handleTypedef *hbtn, float btn_IIR_alpha);
+void BTN_Device_Sample(BTN_handleTypedef *hbtn);
+void BTN_Device_SampleALL(BTN_handleTypedef *hbtn);
+enum BTN_State BTN_Device_GetState(BTN_handleTypedef *hbtn);
 ```
 
 ### 4. rotary_switch
-#### Inc/rotary_switch.h Src/rotary_switch.c
+#### Inc/bsp.h Src/bsp.c
 handle the 3 rotary DIP switches and define the functions for sample their position.
 - **RSW1**: Power regulation
 - **RSW2**: Control incidence
 - **RSW3**: Additional rotary
 
 ```c
-typedef struct {
-    GPIO_TypeDef *gpiox[4];
-    uint16_t pin[4];
-    uint8_t state[4];
-    IIR_filter filter[4];
-    uint8_t position;
-} RSW_t;
+enum RSW_Device {
+    RSW_Device1,
+    RSW_Device2,
+    RSW_Device3,
+    RSW_Device_NUM
+};
 
 typedef struct {
-    RSW_t power;
-    RSW_t control;
-    RSW_t user;
-} rswStateHandleTypedef;
+    enum RSW_Device id;
+    struct GPIO_Quad gpio_quad;
+    uint8_t value[4];
+    uint8_t state;
+    IIR_filter filters[4];
+} RSW_handleTypedef;
 
-void RSW_Init(rswStateHandleTypedef *hrsw);
-void RSW_sample_one(RSW_t *rsw);
-void RSW_sample(rswStateHandleTypedef *hrsw);
+void RSW_Devices_Init(RSW_handleTypedef *hrsw, float rsw_IIR_alpha);
+void RSW_Device_Sample(RSW_handleTypedef *hrsw);
+void RSW_Device_SampleALL(RSW_handleTypedef *hrsw);
+uint8_t RSW_Device_GetState(RSW_handleTypedef *hrsw);
 ```
 
 ### 5. can

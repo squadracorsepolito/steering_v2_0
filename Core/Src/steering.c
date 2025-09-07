@@ -32,7 +32,7 @@
 static Steering_Board steering_v2_0;
 
 /*---------- Private function prototypes -------------------------------------*/
-
+void Steering_Sample(Steering_Board steering);
 
 /*---------- Exported Variables ----------------------------------------------*/
 
@@ -52,8 +52,7 @@ void Steering_Run() {
 
     if (now >= sfwTimSample) {
         sfwTimSample = now + BTN_SAMPLE_TIME;
-        BTN_Device_SampleALL(steering_v2_0.hbtn);
-        RSW_Device_SampleALL(steering_v2_0.hrsw);
+        Steering_Sample(steering_v2_0);
     }
 
     if (now >= sfwTimCan) {
@@ -64,4 +63,7 @@ void Steering_Run() {
 }
 
 /*---------- Private Functions -----------------------------------------------*/
-
+void Steering_Sample(Steering_Board steering) {
+    BTN_Device_SampleALL(steering.hbtn);
+    RSW_Device_SampleALL(steering.hrsw);
+}

@@ -33,7 +33,8 @@ struct GPIO_Quad {
 };
 
 
-// Buttons
+/*########## BUTTONS #########################################################*/
+
 enum BTN_Device {
     BTN_1,
     BTN_2,
@@ -60,7 +61,8 @@ typedef struct {
 } BTN_handleTypedef;
 
 
-// Rotary DIP Switches
+/*########## ROTARY SWITCH ###################################################*/
+
 enum RSW_Device {
     RSW_Device1,
     RSW_Device2,
@@ -73,7 +75,6 @@ typedef struct {
     enum RSW_Device id;
     struct GPIO_Quad gpio_quad;
     uint8_t value[4];
-//  enum RSW_State state;
     uint8_t state;
     IIR_filter filters[4];
 } RSW_handleTypedef;
@@ -89,14 +90,13 @@ typedef struct {
 
 
 /* ---------- Exported functions ---------------------------------------------*/
-GPIO_PinState Read_Pin(struct GPIO_Tuple gpio);
-
+GPIO_PinState BTN_Read_Pin(struct GPIO_Tuple gpio);
 void BTN_Devices_Init(BTN_handleTypedef *hbtn, float btn_IIR_alpha);
 void BTN_Device_Sample(BTN_handleTypedef *hbtn);
 void BTN_Device_SampleALL(BTN_handleTypedef *hbtn);
 enum BTN_State BTN_Device_GetState(BTN_handleTypedef *hbtn);
 
-
+GPIO_PinState RSW_Read_Pin(struct GPIO_Quad gpio, uint8_t index);
 void RSW_Devices_Init(RSW_handleTypedef *hrsw, float rsw_IIR_alpha);
 void RSW_Device_Sample(RSW_handleTypedef *hrsw);
 void RSW_Device_SampleALL(RSW_handleTypedef *hrsw);

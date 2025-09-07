@@ -73,10 +73,13 @@ static struct GPIO_Quad RSW_Device_to_GPIO_Quad_map[RSW_Device_NUM] = {
 
 
 /*---------- Exported Functions ----------------------------------------------*/
-GPIO_PinState Read_Pin(struct GPIO_Tuple gpio) {
+GPIO_PinState BTN_Read_Pin(struct GPIO_Tuple gpio) {
     return HAL_GPIO_ReadPin(gpio.GPIO_Port, gpio.GPIO_Pin);
 }
 
+GPIO_PinState RSW_Read_Pin(struct GPIO_Quad gpio, uint8_t index) {
+    return HAL_GPIO_ReadPin(gpio.Pins[index].GPIO_Port, gpio.Pins[index].GPIO_Pin);
+}
 
 /*########## BUTTONS #########################################################*/
 
@@ -94,7 +97,7 @@ void BTN_Devices_Init(BTN_handleTypedef *hbtn, float btn_IIR_alpha) {
 
 
 void BTN_Device_Sample(BTN_handleTypedef *hbtn) {
-    GPIO_PinState raw_value = Read_Pin(hbtn->gpio_tuple);
+    GPIO_PinState raw_value = BTN_Read_Pin(hbtn->gpio_tuple);
 
     float input = (raw_value == GPIO_PIN_RESET) ? 1.0f : 0.0f;
     float filtered = IIR_Update(&hbtn->filter, input);
@@ -114,11 +117,9 @@ void BTN_Device_Sample(BTN_handleTypedef *hbtn) {
 
 
 void BTN_Device_SampleALL(BTN_handleTypedef *hbtn) {
-    BTN_Device_Sample(&hbtn[0]);
-    BTN_Device_Sample(&hbtn[1]);
-    BTN_Device_Sample(&hbtn[2]);
-    BTN_Device_Sample(&hbtn[3]);
-    BTN_Device_Sample(&hbtn[4]);
+    for (uint8_t i = 0; i < BTN_Device_NUM; i++) {
+        BTN_Device_Sample(&hbtn[i]);
+    }
 }
 
 
@@ -145,10 +146,10 @@ void RSW_Devices_Init(RSW_handleTypedef *hrsw, float rsw_IIR_alpha) {
 
 void RSW_Device_Sample(RSW_handleTypedef *hrsw) {
     GPIO_PinState raw_values[4] = {
-        Read_Pin(hrsw->gpio_quad.Pins[0]),
-        Read_Pin(hrsw->gpio_quad.Pins[1]),
-        Read_Pin(hrsw->gpio_quad.Pins[2]),        
-        Read_Pin(hrsw->gpio_quad.Pins[3])
+        RSW_Read_Pin(hrsw->gpio_quad, 0),
+        RSW_Read_Pin(hrsw->gpio_quad, 1),
+        RSW_Read_Pin(hrsw->gpio_quad, 2),
+        RSW_Read_Pin(hrsw->gpio_quad, 3)
     };
 
     for (uint8_t i = 0; i < 4; i++) {
@@ -171,9 +172,9 @@ void RSW_Device_Sample(RSW_handleTypedef *hrsw) {
 
 
 void RSW_Device_SampleALL(RSW_handleTypedef *hrsw) {
-    RSW_Device_Sample(&hrsw[0]);
-    RSW_Device_Sample(&hrsw[1]);
-    RSW_Device_Sample(&hrsw[2]);
+    for (uint8_t i = 0; i < RSW_Device_NUM; i++) {
+            RSW_Device_Sample(&hrsw[i]);
+    }
 }
 
 
