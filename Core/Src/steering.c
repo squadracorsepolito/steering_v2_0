@@ -21,7 +21,7 @@
 /*---------- Private define --------------------------------------------------*/
 #define BTN_SAMPLE_TIME 10
 #define RSW_SAMPLE_TIME 10
-#define CAN_CYCLE_TIME 500
+#define CAN_CYCLE_TIME 200
 
 #define BTN_IIR_ALPHA 0.66f
 #define RSW_IIR_ALPHA 0.66f
@@ -32,7 +32,7 @@
 static Steering_Board steering_v2_0;
 
 /*---------- Private function prototypes -------------------------------------*/
-void Steering_Sample(Steering_Board steering);
+void Steering_Sample(Steering_Board *steering);
 
 /*---------- Exported Variables ----------------------------------------------*/
 
@@ -52,7 +52,7 @@ void Steering_Run() {
 
     if (now >= sfwTimSample) {
         sfwTimSample = now + BTN_SAMPLE_TIME;
-        Steering_Sample(steering_v2_0);
+        Steering_Sample(&steering_v2_0);
     }
 
     if (now >= sfwTimCan) {
@@ -63,7 +63,7 @@ void Steering_Run() {
 }
 
 /*---------- Private Functions -----------------------------------------------*/
-void Steering_Sample(Steering_Board steering) {
-    BTN_Device_SampleALL(steering.hbtn);
-    RSW_Device_SampleALL(steering.hrsw);
+void Steering_Sample(Steering_Board *steering) {
+    BTN_Device_SampleALL(steering->hbtn);
+    RSW_Device_SampleALL(steering->hrsw);
 }

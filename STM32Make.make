@@ -101,7 +101,8 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c \
-Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c
+Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c \
+Lib/MCB/mcb.c
 
 
 CXX_SOURCES = \
@@ -198,7 +199,8 @@ C_INCLUDES =  \
 -IDrivers/CMSIS/Device/ST/STM32F4xx/Include \
 -IDrivers/CMSIS/Include \
 -IDrivers/STM32F4xx_HAL_Driver/Inc \
--IDrivers/STM32F4xx_HAL_Driver/Inc/Legacy
+-IDrivers/STM32F4xx_HAL_Driver/Inc/Legacy \
+-ILib/MCB
 
 
 

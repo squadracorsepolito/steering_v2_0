@@ -23,15 +23,22 @@
 #include "usart.h"
 #include "stdio.h"
 #include "string.h"
+#include "mcb.h"
 /* USER CODE BEGIN 0 */
 void CAN_build_payload(uint8_t *payload, BTN_handleTypedef *hbtn, RSW_handleTypedef *hrsw) {
-    payload[0] = 0;
-    for (uint8_t i = 0; i < BTN_Device_NUM; i++) {
-        payload[0] |= (hbtn[i].state == BTN_state_ON ? 1 : 0) << i;
-    }
+    struct mcb_dash_hmi_devices_state_t hmi;
 
-    payload[1] = (hrsw[RSW_Device1].state & 0x0F) | ((hrsw[RSW_Device2].state & 0x0F) << 4);
-    payload[2] = hrsw[RSW_Device3].state & 0x0F;
+    hmi.btn_1_is_pressed = (hbtn[BTN_1].state == BTN_state_ON);
+    hmi.btn_2_is_pressed = (hbtn[BTN_2].state == BTN_state_ON);
+    hmi.btn_3_is_pressed = (hbtn[BTN_3].state == BTN_state_ON);
+    hmi.btn_4_is_pressed = (hbtn[BTN_4].state == BTN_state_ON);
+    hmi.btn_5_is_pressed = (hbtn[BTN_5].state == BTN_state_ON);
+
+    hmi.rot_sw_1_state = (uint8_t)(hrsw[RSW_Device1].state & 0x0F);
+    hmi.rot_sw_2_state = (uint8_t)(hrsw[RSW_Device2].state & 0x0F);
+    hmi.rot_sw_3_state = (uint8_t)(hrsw[RSW_Device3].state & 0x0F);
+
+    mcb_dash_hmi_devices_state_pack(payload, &hmi, 3u);
 }
 
 
@@ -292,30 +299,36 @@ void HAL_CAN_MspDeInit(CAN_HandleTypeDef* canHandle)
 }
 
 /* USER CODE BEGIN 1 */
-
 #if DEBUG
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan) {
-  CAN_RxHeaderTypeDef rxHeader;
-  uint8_t rxData[8];
-  char msg[128];
+    CAN_RxHeaderTypeDef rxHeader;
+    uint8_t rxData[8];
+    char msg[160];
 
-  if (HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &rxHeader, rxData) == HAL_OK) {
-    uint8_t btn_active[BTN_Device_NUM];
-    for (uint8_t i = 0; i < BTN_Device_NUM; i++) {
-      btn_active[i] = (rxData[0] >> i) & 0x01;
+    if (HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &rxHeader, rxData) == HAL_OK) {
+
+        struct mcb_dash_hmi_devices_state_t hmi_state;
+        if (mcb_dash_hmi_devices_state_unpack(&hmi_state, rxData, 3u) == 0) {
+
+            sprintf(msg,"RX  ID=0x%03X  DLC=%u [%02X %02X %02X]\r\n"
+                "BTN:[%u %u %u %u %u] "
+                "RSW:[%u %u %u]\r\n",
+                (unsigned)rxHeader.StdId,
+                (unsigned)rxHeader.DLC,
+                rxData[0], rxData[1], rxData[2],
+                hmi_state.btn_1_is_pressed,
+                hmi_state.btn_2_is_pressed,
+                hmi_state.btn_3_is_pressed,
+                hmi_state.btn_4_is_pressed,
+                hmi_state.btn_5_is_pressed,
+                hmi_state.rot_sw_1_state,
+                hmi_state.rot_sw_2_state,
+                hmi_state.rot_sw_3_state
+            );
+
+            HAL_UART_Transmit(&huart1, (uint8_t*)msg, strlen(msg), HAL_MAX_DELAY);
+        }
     }
-
-    uint8_t rsw_power   = (rxData[1] >> 0) & 0x0F;
-    uint8_t rsw_control = (rxData[1] >> 4) & 0x0F;
-    uint8_t rsw_user    = (rxData[2] >> 0) & 0x0F;
-
-    sprintf(msg, "CAN RX: [%02X %02X %02X] BTN: [%d %d %d %d %d] RSW: [%d %d %d]\r\n",
-      rxData[0], rxData[1], rxData[2],
-      btn_active[0], btn_active[1], btn_active[2], btn_active[3], btn_active[4],
-      rsw_power, rsw_control, rsw_user);
-
-    HAL_UART_Transmit(&huart1, (uint8_t*)msg, strlen(msg), HAL_MAX_DELAY);
-  }
 }
 #endif
 
