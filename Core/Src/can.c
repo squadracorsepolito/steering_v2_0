@@ -28,15 +28,15 @@
 void CAN_build_payload(uint8_t *payload, BTN_handleTypedef *hbtn, RSW_handleTypedef *hrsw) {
     struct mcb_dash_hmi_devices_state_t hmi;
 
-    hmi.btn_1_is_pressed = (hbtn[BTN_1].state == BTN_state_ON);
-    hmi.btn_2_is_pressed = (hbtn[BTN_2].state == BTN_state_ON);
-    hmi.btn_3_is_pressed = (hbtn[BTN_3].state == BTN_state_ON);
-    hmi.btn_4_is_pressed = (hbtn[BTN_4].state == BTN_state_ON);
-    hmi.btn_5_is_pressed = (hbtn[BTN_5].state == BTN_state_ON);
+    hmi.btn_1_is_pressed = (BTN_Device_GetState(&hbtn[BTN_1]) == BTN_state_ON);
+    hmi.btn_2_is_pressed = (BTN_Device_GetState(&hbtn[BTN_2]) == BTN_state_ON);
+    hmi.btn_3_is_pressed = (BTN_Device_GetState(&hbtn[BTN_3]) == BTN_state_ON);
+    hmi.btn_4_is_pressed = (BTN_Device_GetState(&hbtn[BTN_4]) == BTN_state_ON);
+    hmi.btn_5_is_pressed = (BTN_Device_GetState(&hbtn[BTN_5]) == BTN_state_ON);
 
-    hmi.rot_sw_1_state = (uint8_t)(hrsw[RSW_Device1].state & 0x0F);
-    hmi.rot_sw_2_state = (uint8_t)(hrsw[RSW_Device2].state & 0x0F);
-    hmi.rot_sw_3_state = (uint8_t)(hrsw[RSW_Device3].state & 0x0F);
+    hmi.rot_sw_1_state = RSW_Device_GetState(&hrsw[RSW_Device1]);  
+    hmi.rot_sw_2_state = RSW_Device_GetState(&hrsw[RSW_Device2]);  
+    hmi.rot_sw_3_state = RSW_Device_GetState(&hrsw[RSW_Device3]); 
 
     mcb_dash_hmi_devices_state_pack(payload, &hmi, 3u);
 }
