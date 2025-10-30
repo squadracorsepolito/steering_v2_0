@@ -57,8 +57,6 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define BTN_1_Pin GPIO_PIN_0
-#define BTN_1_GPIO_Port GPIOA
 #define BTN_2_Pin GPIO_PIN_1
 #define BTN_2_GPIO_Port GPIOA
 #define BTN_3_Pin GPIO_PIN_2
@@ -67,6 +65,8 @@ void Error_Handler(void);
 #define BTN_4_GPIO_Port GPIOA
 #define BTN_5_Pin GPIO_PIN_4
 #define BTN_5_GPIO_Port GPIOA
+#define BTN_1_Pin GPIO_PIN_5
+#define BTN_1_GPIO_Port GPIOA
 #define RSW1_C1_Pin GPIO_PIN_0
 #define RSW1_C1_GPIO_Port GPIOB
 #define RSW1_C2_Pin GPIO_PIN_1
@@ -83,14 +83,14 @@ void Error_Handler(void);
 #define RSW3_C8_GPIO_Port GPIOB
 #define RSW1_C8_Pin GPIO_PIN_8
 #define RSW1_C8_GPIO_Port GPIOA
-#define RSW2_C1_Pin GPIO_PIN_4
-#define RSW2_C1_GPIO_Port GPIOB
 #define RSW2_C2_Pin GPIO_PIN_5
 #define RSW2_C2_GPIO_Port GPIOB
 #define RSW2_C4_Pin GPIO_PIN_6
 #define RSW2_C4_GPIO_Port GPIOB
 #define RSW2_C8_Pin GPIO_PIN_7
 #define RSW2_C8_GPIO_Port GPIOB
+#define RSW2_C1_Pin GPIO_PIN_8
+#define RSW2_C1_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 

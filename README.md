@@ -120,3 +120,23 @@ Implements all the function needed for the CAN transmission.
 void CAN_build_payload(uint8_t *payload, btnStateHandleTypedef *hbtn, rswStateHandleTypedef *hrsw);
 void CAN_steering_Msg_send(CAN_HandleTypeDef *hcan, uint8_t *buffer, uint8_t len);
  ```
+
+# Future CAN Integration Guide
+
+When it will be available, integrate the upcoming version of the CAN system into the Steering project by doing the following
+
+## 1. Add the `sCan` Submodule
+
+ add the `sCan` module as a Git submodule inside the `Lib` directory:
+
+```bash
+git submodule add https://github.com/squadracorsepolito/SCan.git
+```
+
+```bash
+git submodule update --init 
+```
+
+## 2. Add the Squadra `Makefile` and update
+
+ copy and paste it from other projects that you can find on the github and update it by looking at which files are in this project and select ONLY the current year sCan folder to don't encounter any trouble while building and flashing.

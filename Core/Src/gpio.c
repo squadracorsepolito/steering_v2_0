@@ -49,20 +49,20 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
-  /*Configure GPIO pins : BTN_1_Pin BTN_2_Pin BTN_3_Pin BTN_4_Pin
-                           BTN_5_Pin */
-  GPIO_InitStruct.Pin = BTN_1_Pin|BTN_2_Pin|BTN_3_Pin|BTN_4_Pin
-                          |BTN_5_Pin;
+  /*Configure GPIO pins : BTN_2_Pin BTN_3_Pin BTN_4_Pin BTN_5_Pin
+                           BTN_1_Pin */
+  GPIO_InitStruct.Pin = BTN_2_Pin|BTN_3_Pin|BTN_4_Pin|BTN_5_Pin
+                          |BTN_1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pins : RSW1_C1_Pin RSW1_C2_Pin RSW1_C4_Pin RSW3_C1_Pin
-                           RSW3_C2_Pin RSW3_C4_Pin RSW3_C8_Pin RSW2_C1_Pin
-                           RSW2_C2_Pin RSW2_C4_Pin RSW2_C8_Pin */
+                           RSW3_C2_Pin RSW3_C4_Pin RSW3_C8_Pin RSW2_C2_Pin
+                           RSW2_C4_Pin RSW2_C8_Pin RSW2_C1_Pin */
   GPIO_InitStruct.Pin = RSW1_C1_Pin|RSW1_C2_Pin|RSW1_C4_Pin|RSW3_C1_Pin
-                          |RSW3_C2_Pin|RSW3_C4_Pin|RSW3_C8_Pin|RSW2_C1_Pin
-                          |RSW2_C2_Pin|RSW2_C4_Pin|RSW2_C8_Pin;
+                          |RSW3_C2_Pin|RSW3_C4_Pin|RSW3_C8_Pin|RSW2_C2_Pin
+                          |RSW2_C4_Pin|RSW2_C8_Pin|RSW2_C1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
