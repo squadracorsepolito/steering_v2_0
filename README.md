@@ -125,6 +125,21 @@ void CAN_steering_Msg_send(CAN_HandleTypeDef *hcan, uint8_t *buffer, uint8_t len
 
 When it will be available, integrate the upcoming version of the CAN system into the Steering project by doing the following
 
+## 0. Structure of the message
+
+The following is the current version modified by me, but in sc26 it will have at least different names and id since it is no more included in the dash control unit 
+```
+BO_ 357 DASH__hmiDevicesState : 3 DASH
+ SG_ BTN_1_isPressed : 0|1@1+ (1,0) [0|1] "" DSPACE, SCANNER
+ SG_ BTN_2_isPressed : 1|1@1+ (1,0) [0|1] "" DSPACE, SCANNER
+ SG_ BTN_3_isPressed : 2|1@1+ (1,0) [0|1] "" DSPACE, SCANNER
+ SG_ BTN_4_isPressed : 3|1@1+ (1,0) [0|1] "" DSPACE, SCANNER
+ SG_ BTN_5_isPressed : 4|1@1+ (1,0) [0|1] "" DSPACE, SCANNER
+ SG_ ROT_SW_1_state : 8|4@1+ (1,0) [0|9] "" DSPACE, SCANNER
+ SG_ ROT_SW_2_state : 12|4@1+ (1,0) [0|9] "" DSPACE, SCANNER
+ SG_ ROT_SW_3_state : 16|4@1+ (1,0) [0|9] "" DSPACE, SCANNER
+```
+
 ## 1. Add the `sCan` Submodule
 
  add the `sCan` module as a Git submodule inside the `Lib` directory:
